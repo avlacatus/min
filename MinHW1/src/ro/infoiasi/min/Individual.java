@@ -33,10 +33,18 @@ public class Individual extends BitSet {
         return output;
     }
 
+    public static Individual[][] clone(Individual[][] obj) {
+        Individual[][] output = new Individual[obj.length][obj[0].length];
+        for (int i = 0; i < obj.length; i++) {
+            output[i] = Individual.clone(obj[i]);
+        }
+        return output;
+    }
+
     public static String toString(Individual i) {
         return i.toBitString();
     }
-    
+
     public static String toString(Individual[] config) {
         StringBuffer buf = new StringBuffer();
         for (Individual i : config) {
@@ -44,7 +52,7 @@ public class Individual extends BitSet {
         }
         return buf.toString();
     }
-    
+
     public static String toString(Individual[][] configList) {
         StringBuffer buf = new StringBuffer();
         for (Individual[] config : configList) {

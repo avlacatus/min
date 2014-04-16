@@ -4,7 +4,7 @@ package ro.infoiasi.min;
  * Created by alexandra.lacatus on 3/19/14.
  */
 public abstract class AbstractExecution {
-    protected void log(Object obj) {
+    public static void log(Object obj) {
         if (obj != null) {
             if (obj instanceof Individual[]) {
                 log(Individual.toString((Individual[]) obj));
@@ -18,7 +18,7 @@ public abstract class AbstractExecution {
         }
     }
 
-    protected void loge(Object obj) {
+    public static void loge(Object obj) {
         if (obj != null) {
             if (obj instanceof Individual[]) {
                 loge(Individual.toString((Individual[]) obj));

@@ -18,7 +18,8 @@ public class HybridAlgorithmExecution extends GeneticAlgorithmExecution {
             output = new Double[population.length];
             for (int i = 0; i < population.length; i++) {
                 HillClimbingExecution exec = new HillClimbingExecution(population[i], getFitnessAlgorithm());
-                output[i] = exec.exec();
+                double returnedValue = 1 / (exec.exec() + getFitnessAlgorithm().EPSILON);
+                output[i] = returnedValue;
             }
         }
         return output;

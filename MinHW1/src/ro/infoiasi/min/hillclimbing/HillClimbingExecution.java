@@ -7,7 +7,7 @@ import ro.infoiasi.min.Individual;
 public class HillClimbingExecution extends AbstractExecution {
     private FitnessAlgorithm fitnessAlgorithm;
     private Individual[] startingConfig;
-
+    private int fitnessEvaluationCount = 0;
     public HillClimbingExecution(Individual[] startingConfig,
                                  FitnessAlgorithm fitnessAlgorithm) {
         super();
@@ -18,27 +18,28 @@ public class HillClimbingExecution extends AbstractExecution {
     public Double exec() {
         Double output = null;
 
-        Individual[] curentConfig = startingConfig;
-        int iterationCount = 0;
+        Individual[] currentConfig = startingConfig;
+        double currentConfigEval = fitnessAlgorithm.evaluateFunction(currentConfig);
+        fitnessEvaluationCount = 1;
         while (true) {
-            Individual[][] neighbors = computeNeighbors(curentConfig);
+            Individual[][] neighbors = computeNeighbors(currentConfig);
             Individual[] nextConfig = null;
             double nextEval = Double.MAX_VALUE;
             for (Individual[] config : neighbors) {
-                if (fitnessAlgorithm.evaluateFunction(config) < nextEval) {
+                double possibleNextEval = fitnessAlgorithm.evaluateFunction(config);
+                if (possibleNextEval < nextEval) {
                     nextConfig = config;
-                    nextEval = fitnessAlgorithm.evaluateFunction(config);
+                    nextEval = possibleNextEval;
                 }
             }
-            log("iteration " + iterationCount++ + " " + nextEval);
-            if (nextEval >= fitnessAlgorithm.evaluateFunction(curentConfig)) {
-                output = fitnessAlgorithm.evaluateFunction(curentConfig);
-                log("Result is: ");
-                log(curentConfig);
-                log(output);
+
+            if (nextEval >= currentConfigEval) {
+                output = currentConfigEval;
                 break;
             }
-            curentConfig = nextConfig;
+            currentConfig = nextConfig;
+            currentConfigEval = fitnessAlgorithm.evaluateFunction(currentConfig);
+            fitnessEvaluationCount++;
         }
 
         return output;
@@ -63,5 +64,9 @@ public class HillClimbingExecution extends AbstractExecution {
             }
         }
         return output;
+    }
+
+    public int getFitnessEvaluationCount() {
+        return fitnessEvaluationCount;
     }
 }

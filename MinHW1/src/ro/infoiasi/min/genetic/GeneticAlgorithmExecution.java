@@ -34,29 +34,25 @@ public class GeneticAlgorithmExecution extends AbstractExecution {
 
     public void exec() {
         init();
+        exec(population);
+    }
+
+    public void exec(Individual[][] population) {
+        this.population = Individual.clone(population);
         fitnesses = evaluate(population);
         Double[] fitnessesk1 = fitnesses;
         Individual[][] populationk1 = population;
         int k = 0;
         do {
-            log("Iteration " + k);
+            log("**************************************");
             populationk1 = rouletteWheelSelection(populationk1, fitnessesk1);
             fitnessesk1 = evaluate(populationk1);
-//            System.out.print("Fitnesses after selection: \n");
-//            for (int i = 0; i < fitnessesk1.length; i++) {
-//                System.out.print(fitnessesk1[i] + " \n");
-//            }
             populationk1 = mutate(populationk1, mutationRate);
             populationk1 = crossover(populationk1, crossoverRate);
             fitnessesk1 = evaluate(populationk1);
             k++;
-//            System.out.print("Fitnesses after crossover & mutation: \n");
-//            for (int i = 0; i < fitnessesk1.length; i++) {
-//                System.out.print(fitnessesk1[i] + " \n");
-//            }
-            printIterationWinner(fitnessesk1, populationk1);
+            printIterationWinner(k, fitnessesk1, populationk1);
             saveEliteIndividual(fitnessesk1, populationk1);
-            log("**************************************");
         } while (Collections.max(Arrays.asList(fitnessesk1)) < MAX_FITNESS && k < MAX_ITERATIONS);
     }
 
@@ -72,7 +68,7 @@ public class GeneticAlgorithmExecution extends AbstractExecution {
         eliteIndividual = population[maxIndex];
     }
 
-    private void printIterationWinner(Double[] fitnesses, Individual[][] population) {
+    private void printIterationWinner(int iterationIndex, Double[] fitnesses, Individual[][] population) {
         double max = Collections.max(Arrays.asList(fitnesses));
         int maxIndex = -1;
         for (int i = 0; i < fitnesses.length; i++) {
@@ -83,8 +79,7 @@ public class GeneticAlgorithmExecution extends AbstractExecution {
         }
         double value = fitnesses[maxIndex];
         value = 1 / value - 0.0001;
-        log("Winner is index " + maxIndex + " " + value + " " + fitnesses[maxIndex]);
-        log(population[maxIndex]);
+        log(iterationIndex + " Winner is " + " " + value + " " + fitnesses[maxIndex] + " " + Individual.toString(population[maxIndex]));
     }
 
     private final Individual[][] rouletteWheelSelection(Individual[][] population, Double[] fitnesses) {
@@ -122,10 +117,7 @@ public class GeneticAlgorithmExecution extends AbstractExecution {
             }
             if (!found) {
                 output[output.length-1] = eliteIndividual;
-                loge("almost lost the elite individual " + Individual.toString(eliteIndividual));
-                /**
-                 * Must add the eliteIndividual so that the roulette selection would not lose it
-                 */
+                log("almost lost the elite individual " + Individual.toString(eliteIndividual));
             }
         }
         return output;
@@ -139,15 +131,11 @@ public class GeneticAlgorithmExecution extends AbstractExecution {
             Individual[] selectedCrom = Individual.clone(population[i]);
             double r = random.nextDouble();
             if (r < mutationRate) {
-                // log("mutating index " + i);
-                // log(selectedCrom);
                 int selectedGene = random.nextInt(selectedCrom[0].getInitialBitCount());
                 int selectedIndex = random.nextInt(selectedCrom.length);
                 Individual selectedIndiv = selectedCrom[selectedIndex];
                 selectedIndiv.flip(selectedGene);
                 selectedCrom[selectedIndex] = selectedIndiv;
-                // log(selectedCrom);
-                // log("-----------");
             }
             output[i] = selectedCrom;
         }
@@ -178,12 +166,10 @@ public class GeneticAlgorithmExecution extends AbstractExecution {
             randomInt = random.nextInt(selectedIndexes.size());
             int index2 = selectedIndexes.get(randomInt);
             selectedIndexes.remove(Integer.valueOf(index2));
-            // log("Performing crossover between indexes: " + index1 + " " + index2);
 
             Individual[] crossoverResult = performCrossover(population[index1], population[index2]);
             output[index1] = Individual.clone(crossoverResult);
             output[index2] = Individual.clone(crossoverResult);
-            // log("-----------");
         }
         return output;
     }
@@ -194,10 +180,6 @@ public class GeneticAlgorithmExecution extends AbstractExecution {
         int selectedIndividualIndex = random.nextInt(ind1.length);
         int selectedGeneIndex = random.nextInt(ind1[0].getInitialBitCount());
         boolean firstShouldBegin = random.nextBoolean();
-        // log("Performing crossover between: ");
-        // log(Individual.toString(ind1) + " " + Individual.toString(ind2));
-        // log("Selected indexes: " + selectedIndividualIndex + " " + selectedGeneIndex + " " + firstShouldBegin);
-
         Individual[] first, second;
         if (firstShouldBegin) {
             first = ind1;
@@ -224,13 +206,10 @@ public class GeneticAlgorithmExecution extends AbstractExecution {
                 output[i] = middleIndividual;
             }
         }
-        // log("Crossover result: ");
-        // log(Individual.toString(output));
-
         return output;
     }
 
-    private final void init() {
+    private void init() {
         population = new Individual[populationSize][spaceSize];
         for (int i = 0; i < populationSize; i++) {
             for (int j = 0; j < spaceSize; j++) {
