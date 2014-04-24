@@ -18,7 +18,9 @@ public class GeneticAlgorithmExecution extends AbstractExecution {
     private FitnessAlgorithm fitnessAlgorithm;
     private Individual[] eliteIndividual = null;
 
-    private static final double MAX_FITNESS = 100;
+    protected int fitnessEvaluationCount = 0;
+
+    private static final double MAX_FITNESS = 2000;
     private static final int MAX_ITERATIONS = 100;
 
     public GeneticAlgorithmExecution(int spaceSize, int populationCount, int invididualSize, double crossOverRate,
@@ -32,28 +34,29 @@ public class GeneticAlgorithmExecution extends AbstractExecution {
         this.fitnessAlgorithm = fitnessAlgorithm;
     }
 
-    public void exec() {
+    public Double exec() {
         init();
-        exec(population);
+        return exec(population);
     }
 
-    public void exec(Individual[][] population) {
+    public Double exec(Individual[][] population) {
         this.population = Individual.clone(population);
         fitnesses = evaluate(population);
         Double[] fitnessesk1 = fitnesses;
         Individual[][] populationk1 = population;
         int k = 0;
+        Double output;
         do {
-            log("**************************************");
             populationk1 = rouletteWheelSelection(populationk1, fitnessesk1);
-            fitnessesk1 = evaluate(populationk1);
             populationk1 = mutate(populationk1, mutationRate);
             populationk1 = crossover(populationk1, crossoverRate);
             fitnessesk1 = evaluate(populationk1);
             k++;
-            printIterationWinner(k, fitnessesk1, populationk1);
+            output = getIterationWinner(fitnessesk1);
             saveEliteIndividual(fitnessesk1, populationk1);
-        } while (Collections.max(Arrays.asList(fitnessesk1)) < MAX_FITNESS && k < MAX_ITERATIONS);
+        } while (output < MAX_FITNESS && k < MAX_ITERATIONS);
+
+        return output;
     }
 
     private void saveEliteIndividual(Double[] fitnesses, Individual[][] population) {
@@ -68,18 +71,16 @@ public class GeneticAlgorithmExecution extends AbstractExecution {
         eliteIndividual = population[maxIndex];
     }
 
-    private void printIterationWinner(int iterationIndex, Double[] fitnesses, Individual[][] population) {
-        double max = Collections.max(Arrays.asList(fitnesses));
-        int maxIndex = -1;
+    private Double getIterationWinner(Double[] fitnesses) {
+        Double currentMax = fitnesses[0];
         for (int i = 0; i < fitnesses.length; i++) {
-            if (fitnesses[i].equals(max)) {
-                maxIndex = i;
-                break;
+            if (currentMax < fitnesses[i]) {
+                currentMax = fitnesses[i];
             }
         }
-        double value = fitnesses[maxIndex];
+        double value = currentMax;
         value = 1 / value - 0.0001;
-        log(iterationIndex + " Winner is " + " " + value + " " + fitnesses[maxIndex] + " " + Individual.toString(population[maxIndex]));
+        return value;
     }
 
     private final Individual[][] rouletteWheelSelection(Individual[][] population, Double[] fitnesses) {
@@ -117,7 +118,6 @@ public class GeneticAlgorithmExecution extends AbstractExecution {
             }
             if (!found) {
                 output[output.length-1] = eliteIndividual;
-                log("almost lost the elite individual " + Individual.toString(eliteIndividual));
             }
         }
         return output;
@@ -216,7 +216,6 @@ public class GeneticAlgorithmExecution extends AbstractExecution {
                 Individual newIndividual = Individual.generateNewIndividual(individualSize);
                 population[i][j] = newIndividual;
             }
-            log(population[i]);
         }
     }
 
@@ -226,6 +225,7 @@ public class GeneticAlgorithmExecution extends AbstractExecution {
             output = new Double[population.length];
             for (int i = 0; i < population.length; i++) {
                 output[i] = fitnessAlgorithm.evaluateFitness(population[i]);
+                fitnessEvaluationCount++;
             }
         }
         return output;
@@ -233,5 +233,10 @@ public class GeneticAlgorithmExecution extends AbstractExecution {
 
     public FitnessAlgorithm getFitnessAlgorithm() {
         return fitnessAlgorithm;
+    }
+
+    @Override
+    public int getFitnessEvaluationCount() {
+        return fitnessEvaluationCount;
     }
 }

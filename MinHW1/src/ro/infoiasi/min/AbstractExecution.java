@@ -4,6 +4,8 @@ package ro.infoiasi.min;
  * Created by alexandra.lacatus on 3/19/14.
  */
 public abstract class AbstractExecution {
+
+
     public static void log(Object obj) {
         if (obj != null) {
             if (obj instanceof Individual[]) {
@@ -31,5 +33,7 @@ public abstract class AbstractExecution {
             System.err.println("null");
         }
     }
+
+    public abstract int getFitnessEvaluationCount();
 
 }

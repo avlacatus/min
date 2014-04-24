@@ -1,6 +1,8 @@
 package ro.infoiasi.min;
 
+import ro.infoiasi.min.algorithm.GrienwangkAlgorithm;
 import ro.infoiasi.min.algorithm.RastriginAlgorithm;
+import ro.infoiasi.min.algorithm.RosenbrockAlgorithm;
 import ro.infoiasi.min.algorithm.SixHumpCamelBackAlgorithm;
 import ro.infoiasi.min.genetic.GeneticAlgorithmExecution;
 import ro.infoiasi.min.hillclimbing.HillClimbingExecution;
@@ -19,9 +21,93 @@ public class Main {
     public static final int ITERATION_COUNT = 30;
 
     public static void main(String[] args) {
-        hillClimbingDemo(2, new SixHumpCamelBackAlgorithm());
-        // geneticAlgorithmDemo();
-        // hybridizationDemo();
+//        hillClimbingDemo(2, new SixHumpCamelBackAlgorithm());
+//        geneticAlgorithmDemo(new RastriginAlgorithm());
+//        geneticAlgorithmDemo(new GrienwangkAlgorithm());
+//        geneticAlgorithmDemo(new RosenbrockAlgorithm());
+//        geneticAlgorithmDemo(new SixHumpCamelBackAlgorithm());
+
+        hybridAlgoritmDemo(new RastriginAlgorithm());
+        hybridAlgoritmDemo(new GrienwangkAlgorithm());
+        hybridAlgoritmDemo(new RosenbrockAlgorithm());
+        hybridAlgoritmDemo(new SixHumpCamelBackAlgorithm());
+    }
+
+    public static void geneticAlgorithmDemo(FitnessAlgorithm alg) {
+        if (alg instanceof SixHumpCamelBackAlgorithm) {
+            geneticAlgorithmDemo(2, alg);
+            AbstractExecution.log("************************************************");
+        } else {
+            geneticAlgorithmDemo(5, alg);
+            AbstractExecution.log("************************************************");
+            geneticAlgorithmDemo(10, alg);
+            AbstractExecution.log("************************************************");
+            geneticAlgorithmDemo(30, alg);
+        }
+    }
+
+    public static void hybridAlgoritmDemo(FitnessAlgorithm algo) {
+        if (algo instanceof SixHumpCamelBackAlgorithm) {
+            hybridAlgorithmDemo(2, algo);
+            AbstractExecution.log("************************************************");
+        } else {
+            hybridAlgorithmDemo(5, algo);
+            AbstractExecution.log("************************************************");
+            hybridAlgorithmDemo(10, algo);
+            AbstractExecution.log("************************************************");
+            hybridAlgorithmDemo(30, algo);
+        }
+    }
+
+    public static void geneticAlgorithmDemo(int spaceDimension, FitnessAlgorithm algorithm) {
+        AbstractExecution.log("GENETIC ALGORITHM SPACE_DIMENSION=" + spaceDimension + " " + algorithm.getClass().getSimpleName());
+        Double min = Double.MAX_VALUE;
+        Double max = Double.MIN_VALUE;
+        Double avg = 0d;
+
+        for (int it = 0; it < ITERATION_COUNT; it++) {
+            GeneticAlgorithmExecution exec = new GeneticAlgorithmExecution(spaceDimension, POPULATION_SIZE, INDIVIDUAL_SIZE, 0.8, 0.3,
+                    algorithm);
+            Double iterationResult = exec.exec();
+            AbstractExecution.log(it + ", " + exec.getFitnessEvaluationCount() + ", " + iterationResult);
+            if (iterationResult < min) {
+                min = new Double(iterationResult);
+            } else if (max < iterationResult) {
+                max = new Double(iterationResult);
+            }
+            avg += new Double(iterationResult);
+        }
+        avg = avg / ITERATION_COUNT;
+        AbstractExecution.log("Average is: " + avg.toString());
+        AbstractExecution.log("Minimum is: " + min.toString());
+        AbstractExecution.log("Maximum is: " + max.toString() + "\n");
+
+    }
+
+    public static void hybridAlgorithmDemo(int spaceDimension, FitnessAlgorithm algorithm) {
+        AbstractExecution.log("HYBRID ALGORITHM SPACE_DIMENSION=" + spaceDimension + " " + algorithm.getClass().getSimpleName());
+        Double min = Double.MAX_VALUE;
+        Double max = Double.MIN_VALUE;
+        Double avg = 0d;
+
+        for (int it = 0; it < ITERATION_COUNT; it++) {
+
+            GeneticAlgorithmExecution exec = new HybridAlgorithmExecution(spaceDimension, POPULATION_SIZE, INDIVIDUAL_SIZE, 0.8, 0.2,
+                    algorithm, 0.3);
+            Double iterationResult = exec.exec();
+            AbstractExecution.log(it + ", " + exec.getFitnessEvaluationCount() + ", " + iterationResult);
+            if (iterationResult < min) {
+                min = new Double(iterationResult);
+            } else if (max < iterationResult) {
+                max = new Double(iterationResult);
+            }
+            avg += new Double(iterationResult);
+        }
+        avg = avg / ITERATION_COUNT;
+        AbstractExecution.log("Average is: " + avg.toString());
+        AbstractExecution.log("Minimum is: " + min.toString());
+        AbstractExecution.log("Maximum is: " + max.toString() + "\n");
+
     }
 
     public static void hillClimbingDemo(int spaceDimension, FitnessAlgorithm algorithm) {
@@ -52,13 +138,8 @@ public class Main {
         AbstractExecution.log("Maximum is: " + max.toString() + "\n");
     }
 
-    public static void geneticAlgorithmDemo() {
-        GeneticAlgorithmExecution exec = new GeneticAlgorithmExecution(SPACE_DIMENSION, POPULATION_SIZE, INDIVIDUAL_SIZE, 0.8, 0.2,
-                new RastriginAlgorithm());
-        exec.exec();
-    }
 
-    public static void hybridizationDemo() {
+    public static void hybridization() {
         Individual[][] population = new Individual[POPULATION_SIZE][SPACE_DIMENSION];
         for (int i = 0; i < POPULATION_SIZE; i++) {
             for (int j = 0; j < SPACE_DIMENSION; j++) {
@@ -76,7 +157,7 @@ public class Main {
         } catch (IOException e) {
         }
         HybridAlgorithmExecution exec2 = new HybridAlgorithmExecution(SPACE_DIMENSION, POPULATION_SIZE, INDIVIDUAL_SIZE, 0.8, 0.2,
-                new RastriginAlgorithm());
+                new RastriginAlgorithm(), 0.3);
         exec2.exec(population);
     }
 
