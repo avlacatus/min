@@ -1,0 +1,67 @@
++Bucuresti
++Brasov
+//+Cluj-Napoca
+//+Constanta
+//+Craiova
++Iasi
++Sibiu
++Timisoara
+// Iasi -> Bucuresti -> Brasov -> Sibiu -> Timisoara -> Iasi -> 1656
+// Bucuresti -> Sibiu -> Timisoara -> Brasov -> Iasi -> Bucuresti -> 1642
+// Brasov -> Bucuresti -> Iasi -> Sibiu -> Timisoara -> Brasov -> 1663
+Bucuresti - Brasov 161
+Bucuresti - Cluj-Napoca 426
+Bucuresti - Constanta 225
+Bucuresti - Craiova 248
+Bucuresti - Iasi 406
+Bucuresti - Sibiu 282
+Bucuresti - Timisoara 538
+Brasov - Bucuresti 161
+Brasov - Cluj-Napoca 264
+Brasov - Constanta 380
+Brasov - Craiova 205
+Brasov - Iasi 299
+Brasov - Sibiu 142
+Brasov - Timisoara 399
+Cluj-Napoca - Bucuresti 426
+Cluj-Napoca - Brasov 264
+Cluj-Napoca - Constanta 644
+Cluj-Napoca - Craiova 374
+Cluj-Napoca - Iasi 390
+Cluj-Napoca - Sibiu 163
+Cluj-Napoca - Timisoara 316
+Constanta - Bucuresti 232
+Constanta - Brasov 380
+Constanta - Cluj-Napoca 644
+Constanta - Craiova 451
+Constanta - Iasi 434
+Constanta - Sibiu 507
+Constanta - Timisoara 758
+Craiova - Bucuresti 248
+Craiova - Brasov 268
+Craiova - Cluj-Napoca 374
+Craiova - Constanta 451
+Craiova - Iasi 504
+Craiova - Sibiu 236
+Craiova - Timisoara 353
+Iasi - Bucuresti 406
+Iasi - Brasov 299
+Iasi - Cluj-Napoca 390
+Iasi - Constanta 434
+Iasi - Craiova 504
+Iasi - Sibiu 441
+Iasi - Timisoara 691
+Sibiu - Bucuresti 282
+Sibiu - Brasov 142
+Sibiu - Cluj-Napoca 163
+Sibiu - Constanta 507
+Sibiu - Craiova 236
+Sibiu - Iasi 441
+Sibiu - Timisoara 256
+Timisoara - Bucuresti 538
+Timisoara - Brasov 399
+Timisoara - Cluj-Napoca 316
+Timisoara - Constanta 758
+Timisoara - Craiova 353
+Timisoara - Iasi 691
+Timisoara - Sibiu 256
