@@ -21,16 +21,33 @@ public class Main {
     public static final int ITERATION_COUNT = 30;
 
     public static void main(String[] args) {
-//        hillClimbingDemo(2, new SixHumpCamelBackAlgorithm());
-//        geneticAlgorithmDemo(new RastriginAlgorithm());
-//        geneticAlgorithmDemo(new GrienwangkAlgorithm());
-//        geneticAlgorithmDemo(new RosenbrockAlgorithm());
-//        geneticAlgorithmDemo(new SixHumpCamelBackAlgorithm());
+        hillClimbingDemo(new RastriginAlgorithm());
+        hillClimbingDemo(new GrienwangkAlgorithm());
+        hillClimbingDemo(new RosenbrockAlgorithm());
+        hillClimbingDemo(new SixHumpCamelBackAlgorithm());
+
+        geneticAlgorithmDemo(new RastriginAlgorithm());
+        geneticAlgorithmDemo(new GrienwangkAlgorithm());
+        geneticAlgorithmDemo(new RosenbrockAlgorithm());
+        geneticAlgorithmDemo(new SixHumpCamelBackAlgorithm());
 
         hybridAlgoritmDemo(new RastriginAlgorithm());
         hybridAlgoritmDemo(new GrienwangkAlgorithm());
         hybridAlgoritmDemo(new RosenbrockAlgorithm());
         hybridAlgoritmDemo(new SixHumpCamelBackAlgorithm());
+    }
+
+    public static void hillClimbingDemo(FitnessAlgorithm alg) {
+        if (alg instanceof SixHumpCamelBackAlgorithm) {
+            hillClimbingDemo(2, alg);
+            AbstractExecution.log("************************************************");
+        } else {
+            hillClimbingDemo(5, alg);
+            AbstractExecution.log("************************************************");
+            hillClimbingDemo(10, alg);
+            AbstractExecution.log("************************************************");
+            hillClimbingDemo(30, alg);
+        }
     }
 
     public static void geneticAlgorithmDemo(FitnessAlgorithm alg) {
@@ -69,7 +86,7 @@ public class Main {
             GeneticAlgorithmExecution exec = new GeneticAlgorithmExecution(spaceDimension, POPULATION_SIZE, INDIVIDUAL_SIZE, 0.8, 0.3,
                     algorithm);
             Double iterationResult = exec.exec();
-            AbstractExecution.log(it + ", " + exec.getFitnessEvaluationCount() + ", " + iterationResult);
+            AbstractExecution.log(exec.getFitnessEvaluationCount() + ", " + iterationResult);
             if (iterationResult < min) {
                 min = new Double(iterationResult);
             } else if (max < iterationResult) {
@@ -78,9 +95,10 @@ public class Main {
             avg += new Double(iterationResult);
         }
         avg = avg / ITERATION_COUNT;
-        AbstractExecution.log("Average is: " + avg.toString());
-        AbstractExecution.log("Minimum is: " + min.toString());
-        AbstractExecution.log("Maximum is: " + max.toString() + "\n");
+        AbstractExecution.log("");
+        AbstractExecution.log("Average, " + avg.toString());
+        AbstractExecution.log("Minimum, " + min.toString());
+        AbstractExecution.log("Maximum, " + max.toString() + "\n");
 
     }
 
@@ -95,7 +113,7 @@ public class Main {
             GeneticAlgorithmExecution exec = new HybridAlgorithmExecution(spaceDimension, POPULATION_SIZE, INDIVIDUAL_SIZE, 0.8, 0.2,
                     algorithm, 0.3);
             Double iterationResult = exec.exec();
-            AbstractExecution.log(it + ", " + exec.getFitnessEvaluationCount() + ", " + iterationResult);
+            AbstractExecution.log(exec.getFitnessEvaluationCount() + ", " + iterationResult);
             if (iterationResult < min) {
                 min = new Double(iterationResult);
             } else if (max < iterationResult) {
@@ -104,9 +122,10 @@ public class Main {
             avg += new Double(iterationResult);
         }
         avg = avg / ITERATION_COUNT;
-        AbstractExecution.log("Average is: " + avg.toString());
-        AbstractExecution.log("Minimum is: " + min.toString());
-        AbstractExecution.log("Maximum is: " + max.toString() + "\n");
+        AbstractExecution.log("");
+        AbstractExecution.log("Average, " + avg.toString());
+        AbstractExecution.log("Minimum, " + min.toString());
+        AbstractExecution.log("Maximum, " + max.toString() + "\n");
 
     }
 
@@ -124,7 +143,7 @@ public class Main {
             }
             HillClimbingExecution exec = new HillClimbingExecution(startingConfig, algorithm);
             Double iterationResult = exec.exec();
-            AbstractExecution.log(it + ", " + exec.getFitnessEvaluationCount() + ", " + iterationResult);
+            AbstractExecution.log(exec.getFitnessEvaluationCount() + ", " + iterationResult);
             if (iterationResult < min) {
                 min = new Double(iterationResult);
             } else if (max < iterationResult) {
@@ -133,9 +152,10 @@ public class Main {
             avg += new Double(iterationResult);
         }
         avg = avg / ITERATION_COUNT;
-        AbstractExecution.log("Average is: " + avg.toString());
-        AbstractExecution.log("Minimum is: " + min.toString());
-        AbstractExecution.log("Maximum is: " + max.toString() + "\n");
+        AbstractExecution.log("");
+        AbstractExecution.log("Average, " + avg.toString());
+        AbstractExecution.log("Minimum, " + min.toString());
+        AbstractExecution.log("Maximum, " + max.toString() + "\n");
     }
 
 

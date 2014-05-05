@@ -43,10 +43,11 @@ public class Edge {
 
     @Override
     public String toString() {
-        return "{" + node1 +
-                ", " + node2 +
-                ", cost=" + cost +
-                '}';
+        return "{" + node1.getName().substring(0,3) +
+                ", " + node2.getName().substring(0,3) +
+                ", " + cost +
+                ", " + pheromoneLevel +
+                "}\n";
     }
 
     @Override
@@ -57,6 +58,7 @@ public class Edge {
         Edge edge = (Edge) o;
 
         if (cost != edge.cost) return false;
+        if (Double.compare(edge.pheromoneLevel, pheromoneLevel) != 0) return false;
         if (!node1.equals(edge.node1)) return false;
         if (!node2.equals(edge.node2)) return false;
 
@@ -65,9 +67,13 @@ public class Edge {
 
     @Override
     public int hashCode() {
-        int result = node1.hashCode();
+        int result;
+        long temp;
+        result = node1.hashCode();
         result = 31 * result + node2.hashCode();
         result = 31 * result + cost;
+        temp = Double.doubleToLongBits(pheromoneLevel);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 }

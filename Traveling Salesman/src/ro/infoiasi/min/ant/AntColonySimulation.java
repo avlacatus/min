@@ -15,12 +15,12 @@ public class AntColonySimulation {
 
     private Graph graph;
     private List<ArtificialAnt> ants;
-    public static int ANT_COUNT = 4;
-    public static int ITERATION_COUNT = 10;
+    public static int ANT_COUNT = 5;
+    public static int ITERATION_COUNT = 100;
     public static final double PHEROMONE_CONTROL_PARAM = 0.9;
-    public static final double DESIRABILITY_CONTROL_PARAM = 0.7;
-    public static final double PHEROMONE_EVAPORATION_PARAM = 0.1;
-    public static final double LOCAL_TRAIL_PARAMETER = 0.5;
+    public static final double DESIRABILITY_CONTROL_PARAM = 0.3;
+    public static final double PHEROMONE_EVAPORATION_PARAM = 0.01;
+    public static final double LOCAL_TRAIL_PARAMETER = 0.001;
 
     public AntColonySimulation(Graph graph) {
         this.graph = graph;
@@ -31,10 +31,9 @@ public class AntColonySimulation {
 
         for (int i = 0; i < ITERATION_COUNT; i++) {
             generateAntSolutions();
-//            daemonActions()
-//            pheromoneUpdate()
+            //daemonActions();
             /**
-             * update global trails
+             * updating global trails
              */
             System.out.println(getSystemState(i));
             ArtificialAnt bestAnt = getBestPathAnt(ants);
@@ -46,6 +45,7 @@ public class AntColonySimulation {
                     selectedEdge.setPheromoneLevel(newPheromoneLevel);
                 }
             }
+            System.out.println("===================");
         }
     }
 
@@ -71,6 +71,9 @@ public class AntColonySimulation {
         for (int i = 0; i < graph.getNodesCount(); i++) {
             for (ArtificialAnt ant : ants) {
                 Edge selectedEdge = ant.walk();
+                /**
+                 * Updating local trails
+                 */
                 if (selectedEdge != null) {
                     double newPheromoneLevel = (1 - PHEROMONE_EVAPORATION_PARAM) * selectedEdge.getPheromoneLevel() + PHEROMONE_EVAPORATION_PARAM * LOCAL_TRAIL_PARAMETER;
                     selectedEdge.setPheromoneLevel(newPheromoneLevel);
@@ -102,11 +105,13 @@ public class AntColonySimulation {
         StringBuffer output = new StringBuffer("System state at iteration " + it + "\n");
         for (int i = 0; i < ants.size(); i++) {
             ArtificialAnt ant = ants.get(i);
-            output.append("Ant " + i + "\n");
+            output.append("Ant " + i + " ");
             output.append(ant.toString());
             output.append("\n");
         }
-        output.append("===================");
+        output.append("===================\n");
+        output.append(graph.getAllEdges());
+        output.append("\n===================");
         return output.toString();
     }
 }

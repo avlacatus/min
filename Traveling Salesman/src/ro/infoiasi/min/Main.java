@@ -14,10 +14,13 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        Graph g = readFromFile("romania.test");
-        System.out.println(g);
-        AntColonySimulation simulation = new AntColonySimulation(g);
-        simulation.simulate();
+        for (int i = 0; i < 10; i++) {
+            Graph g = readFromFile("romania.test");
+            System.out.println(g);
+            AntColonySimulation simulation = new AntColonySimulation(g);
+            simulation.simulate();
+            System.in.read();
+        }
     }
 
     private static Graph readFromFile(String fileName) throws IOException {

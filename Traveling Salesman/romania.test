@@ -1,14 +1,15 @@
 +Bucuresti
 +Brasov
-//+Cluj-Napoca
-//+Constanta
-//+Craiova
++Cluj-Napoca
++Constanta
++Craiova
 +Iasi
 +Sibiu
 +Timisoara
+// Brasov -> Bucuresti -> Iasi -> Sibiu -> Timisoara -> Brasov -> 1663
 // Iasi -> Bucuresti -> Brasov -> Sibiu -> Timisoara -> Iasi -> 1656
 // Bucuresti -> Sibiu -> Timisoara -> Brasov -> Iasi -> Bucuresti -> 1642
-// Brasov -> Bucuresti -> Iasi -> Sibiu -> Timisoara -> Brasov -> 1663
+// Iasi -> Bucuresti -> Timisoara -> Sibiu -> Brasov -> Iasi -> 1641
 Bucuresti - Brasov 161
 Bucuresti - Cluj-Napoca 426
 Bucuresti - Constanta 225
