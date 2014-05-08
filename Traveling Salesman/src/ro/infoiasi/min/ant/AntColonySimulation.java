@@ -17,10 +17,10 @@ public class AntColonySimulation {
     private List<ArtificialAnt> ants;
     public static int ANT_COUNT = 5;
     public static int ITERATION_COUNT = 100;
-    public static final double PHEROMONE_CONTROL_PARAM = 0.9;
-    public static final double DESIRABILITY_CONTROL_PARAM = 0.3;
+    public static final double PHEROMONE_CONTROL_PARAM = 0.8;
+    public static final double DESIRABILITY_CONTROL_PARAM = 0.5;
     public static final double PHEROMONE_EVAPORATION_PARAM = 0.01;
-    public static final double LOCAL_TRAIL_PARAMETER = 0.001;
+    public static final double LOCAL_TRAIL_PARAMETER = 0.0005;
 
     public AntColonySimulation(Graph graph) {
         this.graph = graph;
@@ -31,20 +31,25 @@ public class AntColonySimulation {
 
         for (int i = 0; i < ITERATION_COUNT; i++) {
             generateAntSolutions();
-            //daemonActions();
             /**
              * updating global trails
              */
-            System.out.println(getSystemState(i));
             ArtificialAnt bestAnt = getBestPathAnt(ants);
-            System.out.println("Best ant: " + bestAnt);
+
             for (int j = 0; j < bestAnt.getVisitedNodes().size() - 1; j++) {
                 Edge selectedEdge = graph.getEdgeBetweenNodes(bestAnt.getVisitedNodes().get(j), bestAnt.getVisitedNodes().get(j + 1));
                 if (selectedEdge != null) {
-                    double newPheromoneLevel = (1 - PHEROMONE_EVAPORATION_PARAM) * selectedEdge.getPheromoneLevel() + PHEROMONE_EVAPORATION_PARAM * (1 / bestAnt.getCurrentCost());
+                    double newPheromoneLevel = selectedEdge.getPheromoneLevel() + PHEROMONE_EVAPORATION_PARAM * (2 / bestAnt.getCurrentCost());
                     selectedEdge.setPheromoneLevel(newPheromoneLevel);
                 }
             }
+            System.out.println(getSystemState(i));
+            //daemonActions();
+            //Pheromone evaporation
+            for (Edge edge : graph.getAllEdges()) {
+                edge.setPheromoneLevel(edge.getPheromoneLevel() * (1 - PHEROMONE_EVAPORATION_PARAM));
+            }
+            System.out.println("Best ant: " + bestAnt);
             System.out.println("===================");
         }
     }
@@ -75,7 +80,7 @@ public class AntColonySimulation {
                  * Updating local trails
                  */
                 if (selectedEdge != null) {
-                    double newPheromoneLevel = (1 - PHEROMONE_EVAPORATION_PARAM) * selectedEdge.getPheromoneLevel() + PHEROMONE_EVAPORATION_PARAM * LOCAL_TRAIL_PARAMETER;
+                    double newPheromoneLevel = selectedEdge.getPheromoneLevel() + PHEROMONE_EVAPORATION_PARAM * LOCAL_TRAIL_PARAMETER;
                     selectedEdge.setPheromoneLevel(newPheromoneLevel);
                 }
             }
