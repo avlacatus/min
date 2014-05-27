@@ -1,9 +1,9 @@
 package ro.infoiasi.min.graph;
 
-public class Node {
+public class Vertex {
     private String name;
 
-    public Node(String name) {
+    public Vertex(String name) {
         this.name = name;
     }
 
@@ -16,9 +16,9 @@ public class Node {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Node node = (Node) o;
+        Vertex vertex = (Vertex) o;
 
-        if (!name.equals(node.name)) return false;
+        if (!name.equals(vertex.name)) return false;
 
         return true;
     }

@@ -6,15 +6,15 @@ import java.util.Map;
 import java.util.Set;
 
 public class Graph {
-    private Map<String, Node> nodes;
+    private Map<String, Vertex> nodes;
     private Set<Edge> edges;
 
     public Graph() {
-        nodes = new HashMap<String, Node>();
+        nodes = new HashMap<String, Vertex>();
         edges = new HashSet<Edge>();
     }
 
-    public Map<String, Node> getNodes() {
+    public Map<String, Vertex> getNodes() {
         return nodes;
     }
 
@@ -28,49 +28,56 @@ public class Graph {
         }
         return 0;
     }
-    public Set<Edge> getEdges(Node node) {
+
+    public Set<Edge> getEdges(Vertex vertex) {
         Set<Edge> output = new HashSet<Edge>();
         for (Edge e : edges) {
-            if (e.getNode1().equals(node) || e.getNode2().equals(node)) {
+            if (e.getVertex1().equals(vertex) || e.getVertex2().equals(vertex)) {
                 output.add(e);
             }
         }
         return output;
     }
 
-    public void addNode(Node n) {
+    public void clearPheromone() {
+        for (Edge e : edges) {
+            e.setPheromoneLevel(0);
+        }
+    }
+
+    public void addNode(Vertex n) {
         nodes.put(n.getName(), n);
     }
 
-    public void addEdge(Node node1, Node node2, int cost) {
-        edges.add(new Edge(node1, node2, cost));
+    public void addEdge(Vertex vertex1, Vertex vertex2, double cost) {
+        edges.add(new Edge(vertex1, vertex2, cost));
     }
 
-    public Node getNode(String name) {
+    public Vertex getNode(String name) {
         if (nodes != null) {
             return nodes.get(name);
         }
         return null;
     }
 
-    public int getCostBetweenNodes(Node node1, Node node2) {
-        if (node1.equals(node2)) {
+    public double getCostBetweenNodes(Vertex vertex1, Vertex vertex2) {
+        if (vertex1.equals(vertex2)) {
             return 0;
         }
-        Edge selectedEdge = getEdgeBetweenNodes(node1, node2);
+        Edge selectedEdge = getEdgeBetweenNodes(vertex1, vertex2);
         if (selectedEdge != null) {
             return selectedEdge.getCost();
         }
         return Integer.MAX_VALUE;
     }
 
-    public Edge getEdgeBetweenNodes(Node node1, Node node2) {
-        if (node1.equals(node2)) {
+    public Edge getEdgeBetweenNodes(Vertex vertex1, Vertex vertex2) {
+        if (vertex1.equals(vertex2)) {
             return null;
         }
         for (Edge e : edges) {
-            if (e.getNode1().equals(node1) || e.getNode1().equals(node2)) {
-                if (e.getNode2().equals(node1) || e.getNode2().equals(node2)) {
+            if (e.getVertex1().equals(vertex1) || e.getVertex1().equals(vertex2)) {
+                if (e.getVertex2().equals(vertex1) || e.getVertex2().equals(vertex2)) {
                     return e;
                 }
             }
@@ -82,7 +89,7 @@ public class Graph {
     public String toString() {
         return "Graph{" +
                 "nodes=" + nodes +
-                "\nedges=" + edges +
+                "edges=" + edges +
                 '}';
     }
 }

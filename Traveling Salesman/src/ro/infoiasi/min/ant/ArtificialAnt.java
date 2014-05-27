@@ -2,7 +2,7 @@ package ro.infoiasi.min.ant;
 
 import ro.infoiasi.min.graph.Edge;
 import ro.infoiasi.min.graph.Graph;
-import ro.infoiasi.min.graph.Node;
+import ro.infoiasi.min.graph.Vertex;
 
 import java.util.*;
 
@@ -12,31 +12,31 @@ import java.util.*;
 public class ArtificialAnt {
 
     private Graph graph;
-    private Node initialNode;
-    private Node currentNode;
-    private List<Node> nodesVisited = null;
+    private Vertex initialVertex;
+    private Vertex currentVertex;
+    private List<Vertex> nodesVisited = null;
     private int currentCost;
 
 
     public ArtificialAnt(Graph graph) {
-        nodesVisited = new ArrayList<Node>();
+        nodesVisited = new ArrayList<Vertex>();
         this.graph = graph;
     }
 
-    public void setInitialNode(Node initialNode) {
-        this.initialNode = initialNode;
-        this.currentNode = initialNode;
+    public void setInitialVertex(Vertex initialVertex) {
+        this.initialVertex = initialVertex;
+        this.currentVertex = initialVertex;
     }
 
-    public Node getInitialNode() {
-        return initialNode;
+    public Vertex getInitialVertex() {
+        return initialVertex;
     }
 
-    public Node getCurrentNode() {
-        return currentNode;
+    public Vertex getCurrentVertex() {
+        return currentVertex;
     }
 
-    public List<Node> getVisitedNodes() {
+    public List<Vertex> getVisitedNodes() {
         return nodesVisited;
     }
 
@@ -53,24 +53,24 @@ public class ArtificialAnt {
             return null;
         }
         Edge selectedEdge = null;
-        Set<Edge> connectedEdges = graph.getEdges(currentNode);
+        Set<Edge> connectedEdges = graph.getEdges(currentVertex);
         Set<Edge> possibleEdges = new HashSet<Edge>();
         for (Edge e : connectedEdges) {
-            Node otherNode = (currentNode.equals(e.getNode1())) ? e.getNode2() : e.getNode1();
-            if (!nodesVisited.contains(otherNode) && !otherNode.equals(initialNode)) {
+            Vertex otherVertex = (currentVertex.equals(e.getVertex1())) ? e.getVertex2() : e.getVertex1();
+            if (!nodesVisited.contains(otherVertex) && !otherVertex.equals(initialVertex)) {
                 possibleEdges.add(e);
             }
         }
 
-        Node nextNode = null;
+        Vertex nextVertex = null;
         if (possibleEdges.isEmpty()) {
-            nextNode = initialNode;
+            nextVertex = initialVertex;
             /**
              * The walk has finished.
              */
             for (Edge e : connectedEdges) {
-                Node otherNode = (currentNode.equals(e.getNode1())) ? e.getNode2() : e.getNode1();
-                if (otherNode.equals(initialNode)) {
+                Vertex otherVertex = (currentVertex.equals(e.getVertex1())) ? e.getVertex2() : e.getVertex1();
+                if (otherVertex.equals(initialVertex)) {
                     selectedEdge = e;
                 }
             }
@@ -90,12 +90,12 @@ public class ArtificialAnt {
                 selectedEdge = selectRandomly(transitionsProbabilities);
             }
 
-            nextNode = (currentNode.equals(selectedEdge.getNode1())) ? selectedEdge.getNode2() : selectedEdge.getNode1();
+            nextVertex = (currentVertex.equals(selectedEdge.getVertex1())) ? selectedEdge.getVertex2() : selectedEdge.getVertex1();
         }
 
-        nodesVisited.add(currentNode);
+        nodesVisited.add(currentVertex);
         currentCost += selectedEdge.getCost();
-        currentNode = nextNode;
+        currentVertex = nextVertex;
         return selectedEdge;
     }
 
@@ -144,19 +144,19 @@ public class ArtificialAnt {
     }
 
     public void reset() {
-        nodesVisited = new ArrayList<Node>();
-        initialNode = null;
-        currentNode = null;
+        nodesVisited = new ArrayList<Vertex>();
+        initialVertex = null;
+        currentVertex = null;
         currentCost = 0;
     }
 
     @Override
     public String toString() {
         StringBuffer output = new StringBuffer("");
-        for (Node node : getVisitedNodes()) {
-            output.append(node + " -> ");
+        for (Vertex vertex : getVisitedNodes()) {
+            output.append(vertex + " -> ");
         }
-        output.append(getCurrentNode() + " -> ");
+        output.append(getCurrentVertex() + " -> ");
         output.append(getCurrentCost());
         return output.toString();
     }

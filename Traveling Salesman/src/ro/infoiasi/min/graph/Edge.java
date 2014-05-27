@@ -6,14 +6,14 @@ package ro.infoiasi.min.graph;
 
 public class Edge {
 
-    private Node node1;
-    private Node node2;
-    private int cost;
+    private Vertex vertex1;
+    private Vertex vertex2;
+    private double cost;
     private double pheromoneLevel;
 
-    public Edge(Node sourceNode, Node targetNode, int cost) {
-        this.node1 = sourceNode;
-        this.node2 = targetNode;
+    public Edge(Vertex sourceVertex, Vertex targetVertex, double cost) {
+        this.vertex1 = sourceVertex;
+        this.vertex2 = targetVertex;
         this.cost = cost;
     }
 
@@ -21,16 +21,16 @@ public class Edge {
         this.cost = cost;
     }
 
-    public int getCost() {
+    public double getCost() {
         return cost;
     }
 
-    public Node getNode1() {
-        return node1;
+    public Vertex getVertex1() {
+        return vertex1;
     }
 
-    public Node getNode2() {
-        return node2;
+    public Vertex getVertex2() {
+        return vertex2;
     }
 
     public double getPheromoneLevel() {
@@ -43,11 +43,11 @@ public class Edge {
 
     @Override
     public String toString() {
-        return "{" + node1.getName().substring(0,3) +
-                ", " + node2.getName().substring(0,3) +
+        return "{" + vertex1.getName() +
+                ", " + vertex2.getName() +
                 ", " + cost +
                 ", " + pheromoneLevel +
-                "}\n";
+                "}";
     }
 
     @Override
@@ -57,10 +57,10 @@ public class Edge {
 
         Edge edge = (Edge) o;
 
-        if (cost != edge.cost) return false;
+        if (Double.compare(edge.cost, cost) != 0) return false;
         if (Double.compare(edge.pheromoneLevel, pheromoneLevel) != 0) return false;
-        if (!node1.equals(edge.node1)) return false;
-        if (!node2.equals(edge.node2)) return false;
+        if (!vertex1.equals(edge.vertex1)) return false;
+        if (!vertex2.equals(edge.vertex2)) return false;
 
         return true;
     }
@@ -69,9 +69,10 @@ public class Edge {
     public int hashCode() {
         int result;
         long temp;
-        result = node1.hashCode();
-        result = 31 * result + node2.hashCode();
-        result = 31 * result + cost;
+        result = vertex1.hashCode();
+        result = 31 * result + vertex2.hashCode();
+        temp = Double.doubleToLongBits(cost);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(pheromoneLevel);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
