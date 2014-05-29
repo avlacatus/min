@@ -7,7 +7,7 @@ import ro.infoiasi.min.graph.Vertex;
 import java.util.*;
 
 /**
- * Created by Cosmin on 04/05/14.
+ * Created by Alexandra on 04/05/14.
  */
 public class ArtificialAnt {
 

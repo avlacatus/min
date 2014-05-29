@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <travellingSalesmanProblemInstance>
+
+  <name>fri26</name>
+  <source>TSPLIB</source>
+  <description>26 Staedte (Fricker)</description>
+  <doublePrecision>15</doublePrecision>
+  <ignoredDigits>5</ignoredDigits>
+  <dimension>26</dimension>
   <graph>
     <vertex>
       <edge cost="8.300000000000000e+01">1</edge>

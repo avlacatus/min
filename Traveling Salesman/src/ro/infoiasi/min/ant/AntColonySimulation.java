@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by Cosmin on 04/05/14.
+ * Created by Alexandra on 04/05/14.
  */
 public class AntColonySimulation {
 
     private Graph graph;
     private List<ArtificialAnt> ants;
-    public static int ANT_COUNT = 8;
-    public static int ITERATION_COUNT = 100;
+    public static int ANT_COUNT = 5;
+    public static int ITERATION_COUNT = 50;
     public static final double PHEROMONE_CONTROL_PARAM = 0.6;
     public static final double DESIRABILITY_CONTROL_PARAM = 0.3;
     public static final double PHEROMONE_EVAPORATION_PARAM = 0.01;

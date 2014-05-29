@@ -17,19 +17,24 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- * Created by Cosmin on 04/05/14.
+ * Created by Alexandra on 04/05/14.
  */
 public class Main {
 
     public static void main(String[] args) throws IOException {
         try {
             double avg = 0;
+            long now = System.currentTimeMillis();
             Graph g = readFromXML("fri26.xml");
+            System.out.println("Reading finished in " + (double)(System.currentTimeMillis() - now)/1000);
+            now = System.currentTimeMillis();
             for (int i = 0; i < 20; i++) {
                 g.clearPheromone();
                 AntColonySimulation simulation = new AntColonySimulation(g);
                 double result = simulation.simulate(false);
                 System.out.println("Best result: " + result);
+                System.out.println("Result computed in " + (double)(System.currentTimeMillis() - now)/1000);
+                now = System.currentTimeMillis();
                 avg += result;
             }
             avg = avg / 20;
